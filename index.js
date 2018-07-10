@@ -22,12 +22,7 @@ const init = (host, port, clientId) => {
     console.error(error);
   });
   return {
-    sendRecord: (
-      { type, userId, data },
-      partitionValue,
-      topic,
-      callback = () => {}
-    ) => {
+    sendRecord: ({ type, userId, data }, topic, callback = () => {}) => {
       const event = {
         id: uuid.v4(),
         timestamp: Date.now(),
@@ -41,12 +36,7 @@ const init = (host, port, clientId) => {
       );
 
       const record = [
-        {
-          topic: topic,
-          messages: buffer,
-          key: `${userId}`,
-          attributes: 1
-        }
+        { topic: topic, messages: buffer, key: `${userId}`, attributes: 1 }
       ];
 
       producer.send(record, callback);

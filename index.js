@@ -1,13 +1,18 @@
 const kafka = require('kafka-node');
 const uuid = require('uuid');
 
+const KeyedMessage = kafka.KeyedMessage;
 const init = (host, port, clientId) => {
   const client = new kafka.KafkaClient(`${host}:${port}`, `${clientId}`, {
     sessionTimeout: 300,
     spinDelay: 100,
     retries: 2
   });
-  const producer = new kafka.Producer(client);
+  const producer = new kafka.Producer(client, {
+    requireAcks: 1,
+    ackTimeoutMs: 100,
+    partitionerType: 3
+  });
 
   producer.on('ready', () => {
     console.log('Yeehah!! Kafka is ready!!');
@@ -30,16 +35,17 @@ const init = (host, port, clientId) => {
         type: type,
         data: data
       };
+      buffer = new KeyedMessage(
+        `${userId}`,
+        new Buffer.from(JSON.stringify(event))
+      );
 
-      const buffer = new Buffer.from(JSON.stringify(event));
-
-      // Create a new payload
       const record = [
         {
           topic: topic,
           messages: buffer,
-          attributes: 1,
-          partition: partitionValue
+          key: `${userId}`,
+          attributes: 1
         }
       ];
 

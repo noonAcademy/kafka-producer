@@ -7,7 +7,7 @@ const init = (host, port, clientId) => {
     spinDelay: 100,
     retries: 2
   });
-  const producer = new kafka.HighLevelProducer(client);
+  const producer = new kafka.Producer(client);
 
   producer.on('ready', () => {
     console.log('Yeehah!! Kafka is ready!!');
@@ -17,7 +17,12 @@ const init = (host, port, clientId) => {
     console.error(error);
   });
   return {
-    sendRecord: ({ type, userId, data }, topic, callback = () => {}) => {
+    sendRecord: (
+      { type, userId, data },
+      partitionValue,
+      topic,
+      callback = () => {}
+    ) => {
       const event = {
         id: uuid.v4(),
         timestamp: Date.now(),
@@ -33,7 +38,8 @@ const init = (host, port, clientId) => {
         {
           topic: topic,
           messages: buffer,
-          attributes: 1
+          attributes: 1,
+          partition: partitionValue
         }
       ];
 

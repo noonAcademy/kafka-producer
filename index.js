@@ -17,16 +17,11 @@ const init = (host, port, clientId) => {
     console.error(error);
   });
   return {
-    sendRecord: (
-      { type, userId, sessionId, data },
-      topic,
-      callback = () => {}
-    ) => {
+    sendRecord: ({ type, userId, data }, topic, callback = () => {}) => {
       const event = {
         id: uuid.v4(),
         timestamp: Date.now(),
         userId: userId,
-        sessionId: sessionId,
         type: type,
         data: data
       };

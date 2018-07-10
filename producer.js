@@ -23,7 +23,7 @@ const initProducer = (host, port, clientId) => {
     console.error(error);
   });
   return {
-    sendRecord: ({ type, userId, data }, topic, callback = () => {}) => {
+    sendRecord: ({ type, userId, data }, key, topic, callback = () => {}) => {
       const event = {
         id: uuid.v4(),
         timestamp: Date.now(),
@@ -32,12 +32,12 @@ const initProducer = (host, port, clientId) => {
         data: data
       };
       buffer = new KeyedMessage(
-        `${userId}`,
+        `${key}`,
         new Buffer.from(JSON.stringify(event))
       );
 
       const record = [
-        { topic: topic, messages: buffer, key: `${userId}`, attributes: 1 }
+        { topic: topic, messages: buffer, key: `${key}`, attributes: 1 }
       ];
 
       producer.send(record, callback);

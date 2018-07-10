@@ -8,19 +8,6 @@ const {
 function init(consumerOptionsObject, onMessageFunction, onErrorFunction) {
   const consumerOptions = consumerOptionsFormalizer(consumerOptionsObject);
 
-  // function onError(error) {
-  //   console.error(error);
-  //   console.error(error.stack);
-  // }
-
-  // function onMessage(message) {
-  //   console.log(
-  //     `ClientId: ${this.client.clientId} Topic=${message.topic} Partition=${
-  //       message.partition
-  //     } Offset=${message.offset}`
-  //   );
-  // }
-
   const topics = consumerTopicsArrayFormalizer(consumerOptionsObject);
   const consumerGroup = new ConsumerGroup(
     Object.assign(
@@ -37,6 +24,7 @@ function init(consumerOptionsObject, onMessageFunction, onErrorFunction) {
       consumer.close(true, callback);
     });
   });
+  return consumerGroup;
 }
 
 exports.initConsumer = init;

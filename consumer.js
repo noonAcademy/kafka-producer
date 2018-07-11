@@ -9,22 +9,22 @@ function init(consumerOptionsObject, onMessageFunction, onErrorFunction) {
   const consumerOptions = consumerOptionsFormalizer(consumerOptionsObject);
 
   const topics = consumerTopicsArrayFormalizer(consumerOptionsObject);
-  const consumerGroup = new ConsumerGroup(
+  const consumerGroupInstance = new ConsumerGroup(
     Object.assign(
       { id: consumerOptionsObject.consumerId || 'consumer1' },
       consumerOptions
     ),
     topics
   );
-  consumerGroup.on('error', onErrorFunction);
-  consumerGroup.on('message', onMessageFunction);
+  consumerGroupInstance.on('error', onErrorFunction);
+  consumerGroupInstance.on('message', onMessageFunction);
 
   process.once('SIGINT', () => {
-    async.each([consumerGroup], (consumer, callback) => {
+    async.each([consumerGroupInstance], (consumer, callback) => {
       consumer.close(true, callback);
     });
   });
-  return consumerGroup;
+  return consumerGroupInstance;
 }
 
 exports.initConsumer = init;

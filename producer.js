@@ -43,6 +43,19 @@ const initProducer = (host, port, clientId) => {
       ];
 
       producer.send(record, callback);
+    },
+    sendEvent: (data, key, topic, callback = () => {}) => {
+      const event = data;
+      buffer = new KeyedMessage(
+        `${key}`,
+        new Buffer.from(JSON.stringify(event))
+      );
+
+      const record = [
+        { topic: topic, messages: buffer, key: `${key}`, attributes: 1 }
+      ];
+
+      producer.send(record, callback);
     }
   };
 };

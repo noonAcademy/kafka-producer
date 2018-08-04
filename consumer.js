@@ -5,6 +5,12 @@ const {
   consumerTopicsArrayFormalizer
 } = require('./lib/helper_functions');
 
+const q = async.queue((data, callback) => {
+  data.func(data.data, () => {
+    callback();
+  });
+}, 1);
+
 function init(consumerOptionsObject, onMessageFunction, onErrorFunction) {
   const consumerOptions = consumerOptionsFormalizer(consumerOptionsObject);
 
@@ -16,8 +22,24 @@ function init(consumerOptionsObject, onMessageFunction, onErrorFunction) {
     ),
     topics
   );
+
+  q.drain = () => {
+    consumerGroupInstance.resume();
+  };
+
   consumerGroupInstance.on('error', onErrorFunction);
-  consumerGroupInstance.on('message', onMessageFunction);
+
+  consumerGroupInstance.on('message', message => {
+    const messageData = JSON.parse(message.value);
+    if (consumerOptionsObject.isAsync) {
+      onMessageFunction(messageData, () => {});
+    } else {
+      consumerGroupInstance.pause();
+      q.push({ data: messageData, func: onMessageFunction }, err => {
+        console.log('err: ', err);
+      });
+    }
+  });
 
   process.once('SIGINT', () => {
     async.each([consumerGroupInstance], (consumer, callback) => {

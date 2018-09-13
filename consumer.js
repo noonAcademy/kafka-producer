@@ -41,7 +41,7 @@ function init(consumerOptionsObject, onMessageFunction, onErrorFunction) {
         });
       }
     } catch (error) {
-      console.log('KAFKA ERROR LEVEL:50', error, message);
+      // console.log('KAFKA ERROR LEVEL:50', error, message);
     }
   });
 

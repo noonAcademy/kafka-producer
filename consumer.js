@@ -30,14 +30,18 @@ function init(consumerOptionsObject, onMessageFunction, onErrorFunction) {
   consumerGroupInstance.on('error', onErrorFunction);
 
   consumerGroupInstance.on('message', message => {
-    const messageData = JSON.parse(message.value);
-    if (consumerOptionsObject.isAsync) {
-      onMessageFunction(messageData, () => {});
-    } else {
-      consumerGroupInstance.pause();
-      q.push({ data: messageData, func: onMessageFunction }, err => {
-        console.log('err: ', err);
-      });
+    try {
+      const messageData = JSON.parse(message.value);
+      if (consumerOptionsObject.isAsync) {
+        onMessageFunction(messageData, () => {});
+      } else {
+        consumerGroupInstance.pause();
+        q.push({ data: messageData, func: onMessageFunction }, err => {
+          console.log('err: ', err);
+        });
+      }
+    } catch (error) {
+      console.log('KAFKA ERROR LEVEL:50', error, message);
     }
   });
 

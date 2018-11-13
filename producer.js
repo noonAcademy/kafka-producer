@@ -7,9 +7,17 @@ const initProducer = (host, port, clientId) => {
   const client = new kafka.KafkaClient({
     kafkaHost: `${host}:${port}`,
     clientId: `${clientId}`,
-    sessionTimeout: 300,
+    connectTimeout: 10000,
+    requestTimeout: 30000,
     spinDelay: 100,
-    retries: 2
+    retries: 200,
+    connectRetryOptions: {
+      retries: 5000,
+      factor: 0,
+      minTimeout: 1000,
+      maxTimeout: 1000,
+      randomize: true
+    }
   });
   const producer = new kafka.Producer(client, {
     requireAcks: 1,
@@ -18,11 +26,11 @@ const initProducer = (host, port, clientId) => {
   });
 
   producer.on('ready', () => {
-    console.log('Yeehah!! Kafka is ready!!');
+    // console.log('Yeehah!! Kafka is ready!!');
   });
 
   producer.on('error', error => {
-    console.error(error);
+    console.log('KAFKA PRODUCER LEVEL:50', error);
   });
   return {
     sendRecord: ({ type, userId, data }, key, topic, callback = () => {}) => {

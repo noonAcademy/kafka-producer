@@ -37,7 +37,9 @@ function init(consumerOptionsObject, onMessageFunction, onErrorFunction) {
       } else {
         consumerGroupInstance.pause();
         q.push({ data: messageData, func: onMessageFunction }, err => {
-          console.log('err: ', err);
+          if (err) {
+            console.log('KAFKA CONSUMER LEVEL:50: ', err);
+          }
         });
       }
     } catch (error) {

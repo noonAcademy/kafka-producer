@@ -4,13 +4,6 @@ const uuid = require('uuid');
 const KeyedMessage = kafka.KeyedMessage;
 
 const initProducer = (host, port, clientId) => {
-  console.log('init producer properties: ', {
-    kafkaHost: `${host}:${port}`,
-    clientId: `${clientId}`,
-    sessionTimeout: 300,
-    spinDelay: 100,
-    retries: 2
-  });
   const client = new kafka.KafkaClient({
     kafkaHost: `${host}:${port}`,
     clientId: `${clientId}`,
@@ -18,7 +11,6 @@ const initProducer = (host, port, clientId) => {
     spinDelay: 100,
     retries: 2
   });
-  console.log('client is: ', client);
   const producer = new kafka.Producer(client, {
     requireAcks: 1,
     ackTimeoutMs: 100,

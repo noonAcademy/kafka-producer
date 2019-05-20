@@ -1,6 +1,6 @@
 {
   "name": "kafka-non-producer",
-  "version": "2.0.17",
+  "version": "2.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.6.1",
+    "axios": "^0.18.0",
     "kafka-node": "^3.0.1",
     "uuid": "^3.3.2"
   },

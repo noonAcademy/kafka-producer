@@ -10,7 +10,7 @@ sendRecordToNoonGate = async ({ type, userId, data }, topic) => {
   let response;
   const url = `${noonGateAddress}/${
     noonGateProducerConstants.noonGateRouteConstant
-  }`;
+  }/${topic}`;
   const bodyData = {
     id: uuid.v4(),
     timestamp: Date.now(),

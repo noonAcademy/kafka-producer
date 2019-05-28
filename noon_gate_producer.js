@@ -6,11 +6,15 @@ const noonGateAddress = `${noonGateProducerConstants.noonGateRpcHostConstant}:${
   noonGateProducerConstants.noonGateRpcPortConstant
 }`;
 
-sendRecordToNoonGate = async ({ type, userId, data }, topic) => {
+sendRecordToNoonGate = async (
+  { type, userId, data },
+  topic,
+  isAsync = false
+) => {
   let response;
   const url = `${noonGateAddress}/${
     noonGateProducerConstants.noonGateRouteConstant
-  }/${topic}`;
+  }/${topic}?sync=${isAsync}`;
   const bodyData = {
     id: uuid.v4(),
     timestamp: Date.now(),

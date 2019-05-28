@@ -37,7 +37,7 @@ function init(consumerOptionsObject, onMessageFunction, onErrorFunction) {
       } else {
         consumerGroupInstance.pause();
         q.push({ data: messageData, func: onMessageFunction }, err => {
-          console.log('err: ', err);
+          // console.log('err: ', err);
         });
       }
     } catch (error) {

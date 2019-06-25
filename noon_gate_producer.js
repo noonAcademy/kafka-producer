@@ -26,6 +26,12 @@ sendRecordToNoonGate = async (
   try {
     response = await axios.post(url, bodyData);
   } catch (error) {
+    console.log(
+      'NOONGATE URL IS: ',
+      `${noonGateAddress}/${
+        noonGateProducerConstants.noonGateRouteConstant
+      }/${topic}?sync=${isAsync}`
+    );
     throw new Error('noon_gate_producer_internal_error');
   }
   return response;

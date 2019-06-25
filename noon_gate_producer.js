@@ -32,7 +32,7 @@ sendRecordToNoonGate = async (
         noonGateProducerConstants.noonGateRouteConstant
       }/${topic}?sync=${isAsync}`
     );
-    throw new Error('noon_gate_producer_internal_error');
+    throw new Error(`noon_gate_producer_internal_error ${error}`);
   }
   return response;
 };

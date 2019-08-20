@@ -2,9 +2,7 @@ const axios = require('axios');
 const uuid = require('uuid');
 const noonGateProducerConstants = require('./lib/constants/noon_gate_producer');
 
-const noonGateAddress = `${noonGateProducerConstants.noonGateRpcHostConstant}:${
-  noonGateProducerConstants.noonGateRpcPortConstant
-}`;
+const noonGateAddress = `${noonGateProducerConstants.noonGateRpcHostConstant}`;
 
 sendRecordToNoonGate = async (
   { type, userId, data },
